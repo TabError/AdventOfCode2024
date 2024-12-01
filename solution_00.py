@@ -8,21 +8,16 @@ from math import *
 from typing import *
 
 # =============== aocd ===============
-from aocd import get_puzzle, submit
-from aocd.models import _load_users
+from AOC import AOC
 
-year, day = 2024, 0
-user = "github"
-# user = "reddit"
-aocd_session = _load_users()[user]
-
-puzzle = get_puzzle(year=year, day=day, session=aocd_session)
+api = AOC(1, 2024, "github")
+# api = AOC(1, 2024, "reddit")
 
 # =============== snippets ===============
 c = lambda s: complex(s.replace(',', '+') + 'j')
 
 # =============== preparation ===============
-data = puzzle.input_data.splitlines()
+data = api.input().splitlines()
 
 # =============== part 1 ===============
 def f1():
@@ -36,11 +31,11 @@ def f2():
 def main():
     a = f1()
     print(a)
-    # submit(a, part="a", session=aocd_session)
+    # api.submit_a(a)
 
     b = f2()
     print(b)
-    # submit(b, part="b", session=aocd_session)
+    # api.submit_b(b)
 
 if __name__ == "__main__":
     main()
