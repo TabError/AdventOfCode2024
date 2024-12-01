@@ -34,7 +34,6 @@ def f1():
         res += abs(c - d)
     return res
 
-
 # =============== part 2 ===============
 def f2():
     ca = col.Counter(la)
@@ -45,7 +44,6 @@ def f2():
         res += v * ca.get(v) * cb.get(v, 0)
 
     return res
-
 
 # =============== main ===============
 def main():
