@@ -41,12 +41,18 @@ def f2():
         res += q * v * cb.get(v, 0)
 
     return res
-   
+
+
 # =============== main ===============
 
 def main():
-    print(f1())
-    print(f2())
+    a = f1()
+    print(a)
+    # submit(a)
+
+    b = f2()
+    print(b)
+    # submit(b)
 
 if __name__ == "__main__":
     main()
