@@ -33,8 +33,6 @@ def f2():
 
 # =============== main ===============
 
-from aocd import submit
-
 def main():
     a = f1()
     print(a)
