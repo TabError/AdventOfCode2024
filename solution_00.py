@@ -7,6 +7,8 @@ import queue
 from math import *
 from typing import *
 
+import datetime as dt
+
 # =============== handler ===============
 from Handler import IOHandler, StdIO, AOC
 
@@ -42,7 +44,6 @@ def main():
     # handler.submit_b(part_b())
 
 
-    import datetime as dt
     print(dt.datetime.now().strftime("%T:%f")[:-3])
     print()
 
