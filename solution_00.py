@@ -7,42 +7,44 @@ import queue
 from math import *
 from typing import *
 
-# =============== aocd ===============
-from AOC import AOC
+# =============== handler ===============
+from Handler import IOHandler, StdIO, AOC
 
-api = AOC(0, 2024, "github")
+live = 0
+handler: IOHandler = AOC(0, 2024, "github", live=bool(live))
+# handler: IOHandler = StdIO()
 
 # =============== snippets ===============
 c = lambda s: complex(s.replace(',', '+') + 'j')
+dirs = ((0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1))
+check_coords = lambda i, j: 0 <= i < m and 0 <= j < n
 
 # =============== preparation ===============
-data = api.input().splitlines()
-# data = open(0).read().splitlines()
-
+data = handler.input().splitlines()
 # ll = [list(map(int, line.split())) for line in data]
 
 
-# =============== part 1 ===============
-def f1():
-    pass
+# =============== part a ===============
+def part_a():
+    res = 0
 
-# =============== part 2 ===============
-def f2():
-    pass
+    return res
+
+# =============== part b ===============
+def part_b():
+    res = 0
+
+    return res
 
 # =============== main ===============
 def main():
-    a = f1()
-    print(a)
-    # api.submit_a(a)
-
-    b = f2()
-    print(b)
-    # api.submit_b(b)
+    handler.submit_a(part_a())
+    # handler.submit_b(part_b())
 
 
     import datetime as dt
     print(dt.datetime.now().strftime("%T:%f")[:-3])
+    print()
 
 
 if __name__ == "__main__":
