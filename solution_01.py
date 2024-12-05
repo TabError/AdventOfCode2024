@@ -7,48 +7,51 @@ import queue
 from math import *
 from typing import *
 
-# =============== aocd ===============
-from AOC import AOC
+import datetime as dt
 
-api = AOC(1, 2024, "github")
-# api = AOC(1, 2024, "reddit")
+# =============== handler ===============
+from Handler import IOHandler, StdIO, AOC
+
+live = 0
+handler: IOHandler = AOC(1, 2024, "github", live=bool(live))
+# handler: IOHandler = StdIO()
 
 # =============== snippets ===============
 c = lambda s: complex(s.replace(',', '+') + 'j')
+dirs = ((0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1))
+check_coords = lambda i, j: 0 <= i < m and 0 <= j < n
 
 # =============== preparation ===============
-data = api.input().splitlines()
-
-ll = [map(int, line.split()) for line in data]
+data = handler.input().splitlines()
+ll = [list(map(int, line.split())) for line in data]
 la, lb = zip(*ll)
 
-# =============== part 1 ===============
-def f1():
+# =============== part a ===============
+def part_a():
     res = 0
     for c, d in zip(sorted(la), sorted(lb)):
         res += abs(c - d)
     return res
 
-# =============== part 2 ===============
-def f2():
+# =============== part b ===============
+def part_b():
     ca = col.Counter(la)
     cb = col.Counter(lb)
 
     res = 0
     for v in ca:
         res += v * ca.get(v) * cb.get(v, 0)
-
     return res
 
 # =============== main ===============
 def main():
-    a = f1()
-    print(a)
-    api.submit_a(a)
+    handler.submit_a(part_a())
+    handler.submit_b(part_b())
 
-    b = f2()
-    print(b)
-    api.submit_b(b)
+
+    print(dt.datetime.now().strftime("%T:%f")[:-3])
+    print()
+
 
 if __name__ == "__main__":
     main()
