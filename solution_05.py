@@ -30,6 +30,16 @@ samples = [list(map(int, line.split(","))) for line in samples.strip().splitline
 #         if not b:
 #             print("Problem:",a,b)
 
+# # and this is shit ...
+# from graphlib import TopologicalSorter
+# pred = col.defaultdict(list)
+# for a, b in rules:
+#     pred[b].append(a)
+
+# ts = TopologicalSorter(pred)
+# ls = list(ts.static_order())
+# print(ls)
+
 # =============== part 1 ===============
 def correct(ls) -> bool:
     n = len(ls)
