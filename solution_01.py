@@ -6,27 +6,30 @@ import collections as col
 import queue
 from math import *
 from typing import *
+import bisect
 
 import datetime as dt
 
 # =============== handler ===============
 from Handler import IOHandler, StdIO, AOC
 
-live = 0
+live = 1
 handler: IOHandler = AOC(1, 2024, "github", live=bool(live))
 # handler: IOHandler = StdIO()
 
 # =============== snippets ===============
 c = lambda s: complex(s.replace(',', '+') + 'j')
-dirs = ((0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1))
-check_coords = lambda i, j: 0 <= i < m and 0 <= j < n
+dirs = (1, -1, 1j, -1j, 1 + 1j, -1 + 1j, 1 - 1j, -1 - 1j)
 
 # =============== preparation ===============
 data = handler.input().splitlines()
 ll = [list(map(int, line.split())) for line in data]
+# m, n = len(data), len(data[0])
 la, lb = zip(*ll)
 
 # =============== part a ===============
+check_coords = lambda c: 0 <= c.imag < m and 0 <= c.real < n
+
 def part_a():
     res = 0
     for c, d in zip(sorted(la), sorted(lb)):
