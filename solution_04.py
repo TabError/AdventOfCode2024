@@ -6,70 +6,68 @@ import collections as col
 import queue
 from math import *
 from typing import *
+import bisect
 
-# =============== aocd ===============
+import datetime as dt
+
+# =============== handler ===============
 from Handler import IOHandler, StdIO, AOC
 
-handler: IOHandler = AOC(4, 2024, "github", live=True)
+live = 1
+handler: IOHandler = AOC(4, 2024, "github", live=bool(live))
 # handler: IOHandler = StdIO()
 
 # =============== snippets ===============
 c = lambda s: complex(s.replace(',', '+') + 'j')
+dirs = (1, -1, 1j, -1j, 1 + 1j, -1 + 1j, 1 - 1j, -1 - 1j)
 
 # =============== preparation ===============
 data = handler.input().splitlines()
-
+# ll = [list(map(int, line.split())) for line in data]
 m, n = len(data), len(data[0])
 
-# ll = [list(map(int, line.split())) for line in data]
+posls = col.defaultdict(set)
+for i, row in enumerate(data):
+    for j, c in enumerate(row):
+        posls[c].add(complex(j, i))
 
+# =============== part a ===============
+check_coords = lambda c: 0 <= c.imag < m and 0 <= c.real < n
 
-# =============== part 1 ===============
-dirs = ((0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1))
-check_coords = lambda i, j: 0 <= i < m and 0 <= j < n
+def check_word(p: complex, d: complex, word: str):
+    pls = [ p + k * d for k in range(len(word)) ]
+    return all( p in posls[c] for p, c in zip(pls, word) )
 
-word = "XMAS"
-def check_word(i, j, di, dj):
-    coords = [ (i + k * di, j + k * dj) for k in range(len(word)) ]
-    if not all(check_coords(*c) for c in coords):
-        return False
-    oword = [ data[i][j] for i, j in coords ]
-    return all(c == oc for c, oc in zip(word, oword))
+def part_a():
+    word = "XMAS"
 
-
-def f1():
     res = 0
-    for i in range(m):
-        for j in range(n):
-            for d in dirs:
-                res += check_word(i, j, *d)
+    for p in posls[word[0]]:
+        for d in dirs:
+            res += check_word(p, d, word)
     return res
 
-# =============== part 2 ===============
-def check_xmas(i, j):
-    if not data[i][j] == "A":
-        return False
-    if not check_coords(i - 1, j - 1) or not check_coords(i + 1, j + 1):
-        return False
-    return set("MS") == {data[i - 1][j - 1], data[i + 1][j + 1]} == {data[i - 1][j + 1], data[i + 1][j - 1]}
+# =============== part b ===============
+diadirs = (1 + 1j, 1 - 1j, -1 + 1j, -1 - 1j)
 
-def f2():
+def check_xmas(p):
+    if not p in posls["A"]:
+        return False
+    return sum(p + d in posls["M"] and p - d in posls["S"] for d in diadirs) >= 2
+
+
+def part_b():
     res = 0
     for i in range(m):
         for j in range(n):
-            res += check_xmas(i, j)
+            res += check_xmas(complex(j, i))
     return res
 
 # =============== main ===============
 def main():
-    a = f1()
-    handler.submit_a(a)
+    handler.submit_a(part_a())
+    handler.submit_b(part_b())
 
-    b = f2()
-    handler.submit_b(b)
-
-
-    import datetime as dt
     print(dt.datetime.now().strftime("%T:%f")[:-3])
     print()
 
