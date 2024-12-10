@@ -6,15 +6,20 @@ import collections as col
 import queue
 from math import *
 from typing import *
+import bisect
+
+import datetime as dt
 
 # =============== handler ===============
 from Handler import IOHandler, StdIO, AOC
 
-handler: IOHandler = AOC(5, 2024, "github", live=bool(0))
+live = 1
+handler: IOHandler = AOC(5, 2024, "github", live=bool(live))
 # handler: IOHandler = StdIO()
 
 # =============== snippets ===============
 c = lambda s: complex(s.replace(',', '+') + 'j')
+dirs = (1, -1, 1j, -1j, 1 + 1j, -1 + 1j, 1 - 1j, -1 - 1j)
 
 # =============== preparation ===============
 data = handler.input()
@@ -35,12 +40,13 @@ samples = [list(map(int, line.split(","))) for line in samples.strip().splitline
 # pred = col.defaultdict(list)
 # for a, b in rules:
 #     pred[b].append(a)
-
 # ts = TopologicalSorter(pred)
 # ls = list(ts.static_order())
 # print(ls)
 
-# =============== part 1 ===============
+# =============== part a ===============
+check_coords = lambda c: 0 <= c.imag < m and 0 <= c.real < n
+
 def correct(ls) -> bool:
     n = len(ls)
     for i in range(n):
@@ -49,14 +55,14 @@ def correct(ls) -> bool:
                 return False
     return True
 
-def f1():
+def part_a():
     res = 0
     for update in samples:
         if correct(update):
             res += update[len(update) // 2]
     return res
 
-# =============== part 2 ===============
+# =============== part b ===============
 def get_correct(ls) -> list:
     nls = [0] * len(ls)
     for e in ls:
@@ -64,7 +70,7 @@ def get_correct(ls) -> list:
         nls[c] = e
     return nls
 
-def f2():
+def part_b():
     res = 0
     for update in samples:
         if not correct(update):
@@ -74,14 +80,9 @@ def f2():
 
 # =============== main ===============
 def main():
-    a = f1()
-    handler.submit_a(a)
+    handler.submit_a(part_a())
+    handler.submit_b(part_b())
 
-    b = f2()
-    handler.submit_b(b)
-
-
-    import datetime as dt
     print(dt.datetime.now().strftime("%T:%f")[:-3])
     print()
 
