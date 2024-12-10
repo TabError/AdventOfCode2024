@@ -6,34 +6,41 @@ import collections as col
 import queue
 from math import *
 from typing import *
+import bisect
 
-# =============== aocd ===============
-from AOC import AOC
+import datetime as dt
 
-api = AOC(2, 2024, "github")
+# =============== handler ===============
+from Handler import IOHandler, StdIO, AOC
+
+live = 1
+handler: IOHandler = AOC(2, 2024, "github", live=bool(live))
+# handler: IOHandler = StdIO()
 
 # =============== snippets ===============
 c = lambda s: complex(s.replace(',', '+') + 'j')
+dirs = (1, -1, 1j, -1j, 1 + 1j, -1 + 1j, 1 - 1j, -1 - 1j)
 
 # =============== preparation ===============
-data = api.input().splitlines()
-# data = open(0).read().splitlines()
-
+data = handler.input().splitlines()
 ll = [list(map(int, line.split())) for line in data]
+# m, n = len(data), len(data[0])
 
 
-# =============== part 1 ===============
+# =============== part a ===============
+check_coords = lambda c: 0 <= c.imag < m and 0 <= c.real < n
+
 def safe(l):
     d = [ b - a for a, b in zip(l[1:], l) ]
     if any(abs(e) not in [1, 2, 3] for e in d):
         return False
     return all(e > 0 for e in d) or all(e < 0 for e in d)
 
-def f1():
+def part_a():
     return sum(safe(line) for line in ll)
 
-# =============== part 2 ===============
-def f2():
+# =============== part b ===============
+def part_b():
     res = 0
     for l in ll:
         n = len(l)
@@ -48,17 +55,12 @@ def f2():
 
 # =============== main ===============
 def main():
-    a = f1()
-    print(a)
-    # api.submit_a(a)
+    handler.submit_a(part_a())
+    handler.submit_b(part_b())
 
-    b = f2()
-    print(b)
-    # api.submit_b(b)
-
-
-    import datetime as dt
     print(dt.datetime.now().strftime("%T:%f")[:-3])
+    print()
+
 
 if __name__ == "__main__":
     main()
