@@ -38,12 +38,10 @@ check_coords = lambda c: 0 <= c.imag < m and 0 <= c.real < n
 def part_a():
     spots = set()
     for ls in antennas.values():
-        for a, b in it.combinations(ls, r=2):
+        for a, b in it.permutations(ls, r=2):
             d = b - a
             if check_coords(b + d):
                 spots.add(b + d)
-            if check_coords(a - d):
-                spots.add(a - d)
 
     res = len(spots)
     return res
@@ -52,16 +50,11 @@ def part_a():
 def part_b():
     spots = set()
     for ls in antennas.values():
-        for a, b in it.combinations(ls, r=2):
+        for a, b in it.permutations(ls, r=2):
             d = b - a
-            p = b
-            while check_coords(p):
-                spots.add(p)
-                p += d
-            p = a
-            while check_coords(p):
-                spots.add(p)
-                p -= d
+            while check_coords(b):
+                spots.add(b)
+                b += d
 
     res = len(spots)
     return res
