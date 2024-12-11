@@ -26,36 +26,59 @@ data = handler.input().splitlines()
 # ll = [list(map(int, line.split())) for line in data]
 m, n = len(data), len(data[0])
 
-rocks = [ i * 1j + j for i, row in enumerate(data) for j, c in enumerate(row) if c == "#" ]
+rocks = { i * 1j + j for i, row in enumerate(data) for j, c in enumerate(row) if c == "#" }
 guard = [ i * 1j + j for i, row in enumerate(data) for j, c in enumerate(row) if c == "^" ]
 assert len(guard) == 1
+start = (guard[0], -1j)
 
 # =============== part a ===============
 check_coords = lambda c: 0 <= c.imag < m and 0 <= c.real < n
 
-def part_a():
-    d = -1j
-    g = guard[0]
+type history = set[tuple[complex, complex]]
 
-    ps = set()
-    while check_coords(g):
-        ps.add(g)
-        if g + d not in rocks:
-            g += d
+def simulate(guard: complex, move: complex, hist: history = set(), part_b: bool = False) -> str:
+    hist = hist.copy()
+    histpos = {p for p, _ in hist}
+    obs = set()
+    while True:
+        if (guard, move) in hist:
+            return Ellipsis
         else:
-            d *= 1j
-    return len(ps)
+            hist.add((guard, move))
+            histpos.add(guard)
+
+        nextpos = guard + move
+        if nextpos in rocks:
+            move *= 1j
+        else:
+            if not check_coords(nextpos):
+                return histpos if not part_b else obs
+
+            if part_b and nextpos not in histpos:
+                rocks.add(nextpos)
+                if simulate(guard, move * 1j, hist) is Ellipsis:
+                    obs.add(nextpos)
+                rocks.remove(nextpos)
+
+            guard = nextpos
+
+def part_a():
+    hp = simulate(*start)
+    assert hp is not Ellipsis
+    res = len(hp)
+    return res
 
 # =============== part b ===============
 def part_b():
-    res = 0
-
+    obs = simulate(*start, part_b=True)
+    assert obs is not Ellipsis
+    res = len(obs)
     return res
 
 # =============== main ===============
 def main():
     handler.submit_a(part_a())
-    # handler.submit_b(part_b())
+    handler.submit_b(part_b())
 
     print(dt.datetime.now().strftime("%T:%f")[:-3])
     print()
