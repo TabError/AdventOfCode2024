@@ -33,10 +33,9 @@ mul = lambda a, b: a * b
 def check(v: int, c: int, ls: list, funcs: tuple[callable]):
     if not ls:
         return v == c
-
     n = ls[0]
     ls = ls[1:]
-    return any(check(v, f(c, n), ls, funcs) for f in funcs)
+    return any(check(v, f(c, n), ls, funcs) for f in funcs) # any() is ridiculously slow
 
 def part_a():
     funcs = (add, mul)
@@ -44,7 +43,9 @@ def part_a():
     return res
 
 # =============== part b ===============
-con = lambda a, b: int(str(a) + str(b))
+# con = lambda a, b: int(str(a) + str(b))
+con = lambda a, b: a * 10 ** len(str(b)) + b
+# con = lambda a, b: a * 10 ** ceil(log(b + 1, 10)) + b
 
 def part_b():
     funcs = (add, mul, con)
