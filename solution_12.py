@@ -35,52 +35,46 @@ for i, row in enumerate(data):
 # =============== part a ===============
 check_coords = lambda c: 0 <= c.imag < m and 0 <= c.real < n
 
-def gather_region(p: complex) -> tuple[set[complex], int]:
+def gather_region(p: complex) -> tuple[set[complex], set[tuple[complex, complex]]]:
     region = {p}
-    perimeter = 0
-    sideset = set()
-    sides = 0
+    per = set()
 
-    q = queue.Queue()
-    q.put(p)
-
-    while not q.empty():
-        p = q.get()
-        for n in ( p + d for d in dirs ):
-            if check_coords(n) and garden[p] == garden[n]:
+    q = [p]
+    while q:
+        p = q.pop()
+        for view in dirs:
+            n = p + view
+            if check_coords(n) and garden[p] == garden[n]: # inner border
                 if n not in region:
-                    q.put(n)
+                    q.append(n)
                     region.add(n)
-            else:
-                perimeter += 1
-                view = n - p
-                sideset.add((p, view))
-                lp, rp = p + view * 1j, p + view * -1j
-                if (lp, view) not in sideset and (rp, view) not in sideset:
-                    sides += 1
+            else: # outer border / perimeter
+                per.add((p, view))
 
-
-    return region, perimeter, sides
+    return region, per
 
 def all_regions():
     rs = []
     all_gardens = set(garden)
     while len(all_gardens) > 0:
         p = all_gardens.pop()
-        r, per, sides = gather_region(p)
+        r, per = gather_region(p)
         all_gardens.difference_update(r)
-        rs.append((r, per, sides))
+        rs.append((r, per))
     return rs
 
 regions = all_regions()
 
 def part_a():
-    res = sum(len(r) * per for r, per, _ in regions)
+    res = sum(len(r) * len(per) for r, per in regions)
     return res
 
 # =============== part b ===============
+def sides(per: set[tuple[complex, complex]]) -> int:
+    return sum(1 for p, v in per if (p + v * 1j, v) not in per)
+
 def part_b():
-    res = sum(len(r) * sides for r, _, sides in regions)
+    res = sum(len(r) * sides(per) for r, per in regions)
     return res
 
 # =============== main ===============
