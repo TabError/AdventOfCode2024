@@ -31,6 +31,7 @@ stones = [ int(v) for v in data[0].split() ]
 # =============== part a ===============
 check_coords = lambda c: 0 <= c.imag < m and 0 <= c.real < n
 
+@ft.cache
 def blink(stone: int) -> tuple[int]:
     if stone == 0:
         return (1,)
