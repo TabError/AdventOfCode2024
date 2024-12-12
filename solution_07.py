@@ -24,10 +24,7 @@ dirs = (1, -1, 1j, -1j, 1 + 1j, -1 + 1j, 1 - 1j, -1 - 1j)
 # =============== preparation ===============
 data = handler.input().splitlines()
 data = [ line.split(":") for line in data ]
-values, ll = zip(*data)
-values = [ int(v) for v in values ]
-ll = [ list(map(int, ls.split())) for ls in ll ]
-
+data = [ (int(v), list(map(int, ls.split()))) for v, ls in data ]
 
 # =============== part a ===============
 add = lambda a, b: a + b
@@ -43,7 +40,7 @@ def check(v: int, c: int, ls: list, funcs: tuple[callable]):
 
 def part_a():
     funcs = (add, mul)
-    res = sum(v for v, ls in zip(values, ll) if check(v, ls[0], ls[1:], funcs))
+    res = sum(v for v, ls in data if check(v, ls[0], ls[1:], funcs))
     return res
 
 # =============== part b ===============
@@ -51,8 +48,7 @@ con = lambda a, b: int(str(a) + str(b))
 
 def part_b():
     funcs = (add, mul, con)
-    # res = sum(args[0] for args in arg_ls if check(*args, funcs))
-    res = sum(v for v, ls in zip(values, ll) if check(v, ls[0], ls[1:], funcs))
+    res = sum(v for v, ls in data if check(v, ls[0], ls[1:], funcs))
     return res
 
 # =============== main ===============
