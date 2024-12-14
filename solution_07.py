@@ -8,8 +8,6 @@ from math import *
 from typing import *
 import bisect
 
-import datetime as dt
-
 # =============== handler ===============
 from Handler import IOHandler, StdIO, AOC
 
@@ -21,44 +19,46 @@ handler: IOHandler = AOC(7, 2024, "github", live=bool(live))
 c = lambda s: complex(s.replace(',', '+') + 'j')
 dirs = (1, -1, 1j, -1j, 1 + 1j, -1 + 1j, 1 - 1j, -1 - 1j)
 
-# =============== preparation ===============
-data = handler.input().splitlines()
-data = [ line.split(":") for line in data ]
-data = [ (int(v), list(map(int, ls.split()))) for v, ls in data ]
+# =============== solution ===============
+def main(data: str = handler.input()):
+    # =============== preparation ===============
+    data = data.splitlines()
+    data = [ line.replace(":", " ").split() for line in data ]
+    data = [ [int(v) for v in ls] for ls in data ]
 
-# =============== part a ===============
-add = lambda a, b: a + b
-mul = lambda a, b: a * b
+    # =============== part a ===============
+    # add = lambda a, b: a + b
+    # mul = lambda a, b: a * b
+    from operator import add, mul
 
-def check(v: int, c: int, ls: list, funcs: tuple[callable]):
-    if not ls:
-        return v == c
-    n = ls[0]
-    ls = ls[1:]
-    return any(check(v, f(c, n), ls, funcs) for f in funcs) # any() is ridiculously slow
+    def check(v: int, c: int, xs: list, funcs: tuple[callable]):
+        if not xs:
+            return v == c
+        x, *xs = xs
+        # return any(check(v, f(c, x), xs, funcs) for f in funcs) # any() is ridiculously slow
+        for f in funcs:
+            if check(v, f(c, x), xs, funcs):
+                return True
+        return False
 
-def part_a():
-    funcs = (add, mul)
-    res = sum(v for v, ls in data if check(v, ls[0], ls[1:], funcs))
-    return res
+    def part_a():
+        funcs = (add, mul)
+        res = sum(v for v, x, *xs in data if check(v, x, xs, funcs))
+        return res
 
-# =============== part b ===============
-# con = lambda a, b: int(str(a) + str(b))
-con = lambda a, b: a * 10 ** len(str(b)) + b
-# con = lambda a, b: a * 10 ** ceil(log(b + 1, 10)) + b
+    # =============== part b ===============
+    # con = lambda a, b: int(str(a) + str(b))
+    # con = lambda a, b: a * 10 ** len(str(b)) + b
+    con = lambda a, b: a * 10 ** ceil(log10(b + 1)) + b
 
-def part_b():
-    funcs = (add, mul, con)
-    res = sum(v for v, ls in data if check(v, ls[0], ls[1:], funcs))
-    return res
+    def part_b():
+        funcs = (add, mul, con)
+        res = sum(v for v, x, *xs in data if check(v, x, xs, funcs))
+        return res
 
-# =============== main ===============
-def main():
+    # =============== print ===============
     handler.submit_a(part_a())
     handler.submit_b(part_b())
-
-    print(dt.datetime.now().strftime("%T:%f")[:-3])
-    print()
 
 
 if __name__ == "__main__":
