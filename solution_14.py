@@ -104,7 +104,7 @@ def main(data: str = handler.input()):
             # show_them(bots)
             # sleep(0.5)
             if num_components(bots) < 200:
-                show_them(bots)
+                # show_them(bots)
                 return i
 
 
