@@ -5,7 +5,6 @@ import functools as ft
 import collections as col
 import queue
 from math import *
-from typing import *
 import bisect
 
 # =============== handler ===============
@@ -43,7 +42,7 @@ def main(data: str = handler.input()):
 
     # =============== print ===============
     handler.submit_a(part_a())
-    handler.submit_b(part_b())
+    # handler.submit_b(part_b())
 
 
 if __name__ == "__main__":
