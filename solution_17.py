@@ -113,6 +113,8 @@ def main(data: str = handler.input()):
 
     # =============== part b ===============
     def my_program_cycle(A) -> int:
+        # this only simulates one specific puzzle
+        # i.e. this function is hard-coded!
         # 2, 4
         B = A % 8
         # 1, 2
@@ -149,7 +151,6 @@ def main(data: str = handler.input()):
         return outputs
 
     def ultimate_simulater() -> int:
-        # ultimate simulater
         for i in it.count(1):
             if i % 1_000_000 == 0:
                 print(f"checking {i}'s ...")
@@ -198,8 +199,7 @@ def main(data: str = handler.input()):
 
         # solution
         res = find_rec(0, program)
-        outs = sim(res, 0, 0)
-        assert outs == program
+        assert program == sim(res, 0, 0)
 
         return res
 
