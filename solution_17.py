@@ -10,7 +10,7 @@ import bisect
 # =============== handler ===============
 from Handler import IOHandler, StdIO, AOC
 
-live = 0
+live = 1
 handler: IOHandler = AOC(17, 2024, "github", live=bool(live))
 # handler: IOHandler = StdIO()
 
