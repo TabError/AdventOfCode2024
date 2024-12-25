@@ -29,16 +29,17 @@ def main(data: str = handler.input()):
     check_coords = lambda c: 0 <= c.imag < m and 0 <= c.real < n
 
     MOD = 16777216
+    PRU = 0xFFFFFF
     assert MOD == 2 ** 24
+    assert MOD == PRU + 1
 
     assert 64 == 2 ** 6
     assert 32 == 2 ** 5
     assert 2048 == 2 ** 11
 
-    prune = lambda x: x % MOD
-    mult = lambda x: prune((x << 6) ^ x)
-    div = lambda x: prune((x >> 5) ^ x)
-    mult2 = lambda x: prune((x << 11) ^ x)
+    mult = lambda x: x ^ x << 6 & PRU
+    div = lambda x: x ^ x >> 5 & PRU
+    mult2 = lambda x: x ^ x << 11 & PRU
 
     def next_secret(val: int) -> int:
         val = mult(val)
